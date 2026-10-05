@@ -76,3 +76,30 @@ export function repairAll() {
     }
   }
 }
+
+export function swapInvSlots(heroId, i, j) {
+  const hero = state.heroes[heroId];
+  if (!hero) return false;
+  const tmp = hero.slots[i];
+  hero.slots[i] = hero.slots[j];
+  hero.slots[j] = tmp;
+  return true;
+}
+
+export function swapInvAndStash(heroId, slotIndex, stashIid) {
+  const hero = state.heroes[heroId];
+  if (!hero) return false;
+
+  const newInst = state.instances[stashIid];
+  if (!newInst || newInst.ownerId !== "stash") return false;
+
+  const oldIid = hero.slots[slotIndex];
+
+  newInst.ownerId = heroId;
+  hero.slots[slotIndex] = stashIid;
+
+  if (oldIid) {
+    state.instances[oldIid].ownerId = "stash";
+  }
+  return true;
+}

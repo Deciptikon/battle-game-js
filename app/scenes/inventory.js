@@ -5,12 +5,9 @@ import { Button } from "../ui/button.js";
 import { Text } from "../ui/text.js";
 import { makeBackButton } from "../ui/back.js";
 import { drawWallet } from "../ui/currency.js";
-import {
-  listStashItems,
-  listHeroItems,
-  equip,
-  unequip,
-} from "../game/inventory.js";
+import { Stash } from "../game/slots/stash.js";
+import { HeroInventory } from "../game/slots/heroInventory.js";
+import { swapInvSlots, swapInvAndStash } from "../game/inventory.js";
 import { state, saveLocal } from "../game/state.js";
 import { defs } from "../game/defs.js";
 
@@ -18,119 +15,160 @@ export class InventoryScene extends Scene {
   constructor({ characterId }) {
     super();
     this.characterId = characterId;
-    this.selectedIid = null;
+    this.selected = null;
   }
 
   enter() {
-    const heroName = this.characterId;
+    this.stash = new Stash({
+      x: L.x(0.03),
+      y: L.y(0.24),
+      w: L.s(0.09),
+      h: L.s(0.13),
+      gap: L.s(0.012),
+      cols: 5,
+      rows: 2,
+      onSlotClick: (slot) => this.onSlotClick(slot),
+    });
+
+    this.inv = new HeroInventory({
+      x: L.x(0.03),
+      y: L.y(0.68),
+      w: L.s(0.1),
+      h: L.s(0.14),
+      gap: L.s(0.012),
+      count: 6,
+      heroId: this.characterId,
+      onSlotClick: (slot) => this.onSlotClick(slot),
+      onSlotRemove: (slot) => this.onSlotRemove(slot),
+    });
+
+    this.pageText = new Text({
+      x: L.x(0.5),
+      y: L.y(0.59),
+      text: "",
+      size: 0.025,
+      align: "center",
+    });
+
+    this.prevBtn = new Button({
+      x: L.x(0.5) - L.s(0.07),
+      y: L.y(0.5),
+      w: L.s(0.05),
+      h: L.s(0.06),
+      label: "←",
+      onClick: () => {
+        this.stash.prev();
+        this.clearSelection();
+        this.updatePage();
+      },
+    });
+
+    this.nextBtn = new Button({
+      x: L.x(0.5) + L.s(0.02),
+      y: L.y(0.5),
+      w: L.s(0.05),
+      h: L.s(0.06),
+      label: "→",
+      onClick: () => {
+        this.stash.next();
+        this.clearSelection();
+        this.updatePage();
+      },
+    });
+
     this.elements = [
       makeBackButton(),
       new Text({
         x: L.x(0.5),
         y: L.y(0.08),
-        text: "Инвентарь · " + heroName,
-        size: 0.06,
-        align: "center",
+        text: "Инвентарь",
+        style: "title",
       }),
-      new Text({ x: L.x(0.03), y: L.y(0.18), text: "Склад", size: 0.03 }),
-      new Text({ x: L.x(0.03), y: L.y(0.58), text: "Инвентарь", size: 0.03 }),
+      new Text({ x: L.x(0.03), y: L.y(0.18), text: "Склад", style: "body" }),
+      new Text({
+        x: L.x(0.03),
+        y: L.y(0.62),
+        text: "Инвентарь",
+        style: "body",
+      }),
+      this.prevBtn,
+      this.nextBtn,
+      this.pageText,
+      ...this.stash.slots,
+      ...this.inv.slots,
     ];
 
-    // склад — сетка
-    const cellW = L.s(0.1),
-      cellH = L.s(0.14),
-      gap = L.s(0.015);
-    const startX = L.x(0.03),
-      startY = L.y(0.22);
-    const perRow = 5;
-
-    const stash = listStashItems();
-    stash.forEach((entry, i) => {
-      const col = i % perRow;
-      const row = Math.floor(i / perRow);
-      const x = startX + col * (cellW + gap);
-      const y = startY + row * (cellH + gap);
-      const isSelected = entry.inst.iid === this.selectedIid;
-      this.elements.push(
-        new Button({
-          x,
-          y,
-          w: cellW,
-          h: cellH,
-          label: entry.def.name,
-          customDraw: (ctx, b) =>
-            this.drawSlot(ctx, b, entry.def.name, isSelected),
-          onClick: () => {
-            this.selectedIid = entry.inst.iid;
-            this.refresh();
-          },
-        }),
-      );
-    });
-
-    // слоты героя
-    const slotW = L.s(0.1),
-      slotH = L.s(0.14),
-      slotGap = L.s(0.015);
-    const slotStartX = L.x(0.03),
-      slotY = L.y(0.63);
-
-    const heroItems = listHeroItems(this.characterId);
-    heroItems.forEach(({ slotIndex, inst, def }) => {
-      const x = slotStartX + slotIndex * (slotW + slotGap);
-      const isSelected = inst && inst.iid === this.selectedIid;
-      this.elements.push(
-        new Button({
-          x,
-          y: slotY,
-          w: slotW,
-          h: slotH,
-          label: def ? def.name : "",
-          customDraw: (ctx, b) =>
-            this.drawSlot(ctx, b, def ? def.name : "", isSelected),
-          onClick: () => this.onSlotClick(slotIndex, inst),
-        }),
-      );
-    });
+    this.updatePage();
   }
 
-  refresh() {
-    this.enter();
+  updatePage() {
+    this.pageText.text = `${this.stash.page + 1} / ${this.stash.pageCount()}`;
+    this.prevBtn.disabled = this.stash.page === 0;
+    this.nextBtn.disabled = this.stash.page >= this.stash.pageCount() - 1;
   }
 
-  onSlotClick(slotIndex, inst) {
-    if (inst) {
-      // занят — снять
-      unequip(this.characterId, slotIndex);
-      if (this.selectedIid === inst.iid) this.selectedIid = null;
-      saveLocal();
-      this.refresh();
+  clearSelection() {
+    if (this.selected) this.selected.selected = false;
+    this.selected = null;
+  }
+
+  onSlotClick(slot) {
+    const sel = this.selected;
+
+    // ничего не выбрано — выбрать
+    if (!sel) {
+      if (slot.empty) return;
+      slot.selected = true;
+      this.selected = slot;
       return;
     }
 
-    // пусто — надеть выделенное
-    if (!this.selectedIid) return;
-    const ok = equip(this.characterId, this.selectedIid, slotIndex);
+    // тот же слот — снять выделение
+    if (sel === slot) {
+      slot.selected = false;
+      this.selected = null;
+      return;
+    }
+
+    // разные слоты — операция
+    let ok = false;
+
+    if (sel.kind === "inv" && slot.kind === "inv") {
+      ok = swapInvSlots(this.characterId, sel.index, slot.index);
+    } else if (sel.kind === "stash" && slot.kind === "inv") {
+      const entry = sel.entry;
+      if (entry)
+        ok = swapInvAndStash(this.characterId, slot.index, entry.inst.iid);
+    } else if (sel.kind === "inv" && slot.kind === "stash") {
+      const entry = slot.entry;
+      if (entry)
+        ok = swapInvAndStash(this.characterId, sel.index, entry.inst.iid);
+    } else {
+      // stash → stash: просто сменить выделение
+      sel.selected = false;
+      slot.selected = true;
+      this.selected = slot;
+      return;
+    }
+
     if (ok) {
-      this.selectedIid = null;
       saveLocal();
-      this.refresh();
+      sel.selected = false;
+      slot.selected = false;
+      this.selected = null;
+      this.updatePage();
     }
   }
 
-  drawSlot(ctx, b, label, active) {
-    ctx.fillStyle = theme.panel;
-    ctx.fillRect(b.x, b.y, b.w, b.h);
-    ctx.strokeStyle = active ? theme.accent : theme.panelBorder;
-    ctx.strokeRect(b.x + 0.5, b.y + 0.5, b.w - 1, b.h - 1);
-
-    if (label) {
-      ctx.fillStyle = theme.text;
-      ctx.font = `${L.s(0.02)}px monospace`;
-      ctx.textAlign = "center";
-      ctx.fillText(label, b.x + b.w / 2, b.y + b.h - L.s(0.012));
-      ctx.textAlign = "left";
+  onSlotRemove(slot) {
+    const entry = slot.entry;
+    if (!entry) return;
+    if (this.selected === slot) {
+      this.selected = null;
     }
+    entry.inst.ownerId = "stash";
+    state.heroes[this.characterId].slots[slot.index] = null;
+    saveLocal();
   }
 
   render(ctx) {
@@ -147,16 +185,33 @@ export class InventoryScene extends Scene {
 
     super.render(ctx);
 
-    // описание выделенного предмета — поверх панели
-    if (this.selectedIid) {
-      const inst = state.instances[this.selectedIid];
-      const def = defs.items.get(inst.defId);
-      ctx.fillStyle = theme.text;
-      ctx.font = `${L.s(0.032)}px monospace`;
-      ctx.fillText(def.name, px + L.s(0.02), py + L.s(0.05));
-      ctx.fillStyle = theme.textMuted;
-      ctx.font = `${L.s(0.025)}px monospace`;
-      ctx.fillText(def.description ?? "", px + L.s(0.02), py + L.s(0.09));
+    if (this.selected) {
+      const entry = this.selected.entry;
+      if (entry) {
+        const owner = this.ownerLabel(entry.inst.ownerId);
+
+        ctx.fillStyle = theme.text;
+        ctx.font = `${L.s(0.032)}px monospace`;
+        ctx.fillText(entry.def.name, px + L.s(0.02), py + L.s(0.05));
+
+        ctx.fillStyle = theme.textFaint;
+        ctx.font = `${L.s(0.022)}px monospace`;
+        ctx.fillText(owner, px + L.s(0.02), py + L.s(0.09));
+
+        ctx.fillStyle = theme.textMuted;
+        ctx.font = `${L.s(0.025)}px monospace`;
+        ctx.fillText(
+          entry.def.description ?? "",
+          px + L.s(0.02),
+          py + L.s(0.14),
+        );
+      }
     }
+  }
+
+  ownerLabel(ownerId) {
+    if (ownerId === "stash") return "Владелец: отсутствует";
+    const def = defs.heroes.get(ownerId);
+    return "Владелец: " + (def.name ?? ownerId);
   }
 }

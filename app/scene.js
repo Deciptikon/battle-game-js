@@ -13,8 +13,8 @@ export class Scene {
 
   onPointerUp(mx, my) {
     for (const el of this.elements) {
-      if (el.hit(mx, my)) {
-        el.click();
+      if (el.hit?.(mx, my)) {
+        el.click?.(mx, my);
         return;
       }
     }
