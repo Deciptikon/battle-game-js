@@ -1,0 +1,22 @@
+export class Scene {
+  elements = [];
+
+  enter() {}
+  exit() {}
+  update(dt) {}
+  onPointerDown(x, y) {}
+  onKeyDown(key) {}
+
+  render(ctx) {
+    for (const el of this.elements) el.draw(ctx);
+  }
+
+  onPointerUp(mx, my) {
+    for (const el of this.elements) {
+      if (el.hit(mx, my)) {
+        el.click();
+        return;
+      }
+    }
+  }
+}
