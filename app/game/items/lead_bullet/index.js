@@ -5,8 +5,8 @@ export default {
   name: "Свинцовая пуля",
   description: "Скрытность = 8, скорость = 1.",
 
-  mods: {
-    [STAT.STEALTH]: () => 8,
-    [STAT.SPEED]: () => 1,
+  apply(hero) {
+    hero.stats[STAT.STEALTH] = 8;
+    hero.stats[STAT.SPEED] = 1;
   },
 };

@@ -5,7 +5,9 @@ export class Scene {
   exit() {}
   update(dt) {}
   onPointerDown(x, y) {}
+  onPointerMove(x, y) {}
   onKeyDown(key) {}
+  onWheel(e) {}
 
   render(ctx) {
     for (const el of this.elements) el.draw(ctx);

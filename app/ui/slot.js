@@ -23,6 +23,12 @@ export class Slot extends UIElement {
     return this.onRemove && !this.empty;
   }
 
+  // «чужой» = только склад, и только если надет на кого-то
+  get foreign() {
+    const e = this.entry;
+    return this.kind === "stash" && e && e.inst.ownerId !== "stash";
+  }
+
   removeRect() {
     if (!this.removable) return null;
     const s = this.w * 0.35;
@@ -30,9 +36,12 @@ export class Slot extends UIElement {
   }
 
   hit(mx, my) {
-    if (mx < this.x || mx > this.x + this.w) return false;
-    if (my < this.y || my > this.y + this.h) return false;
-    return true;
+    return (
+      mx >= this.x &&
+      mx <= this.x + this.w &&
+      my >= this.y &&
+      my <= this.y + this.h
+    );
   }
 
   click(mx, my) {
@@ -47,7 +56,7 @@ export class Slot extends UIElement {
   draw(ctx) {
     const entry = this.entry;
 
-    ctx.fillStyle = theme.panel;
+    ctx.fillStyle = this.foreign ? theme.panelForeign : theme.panel;
     ctx.fillRect(this.x, this.y, this.w, this.h);
 
     ctx.strokeStyle = this.selected ? theme.accent : theme.panelBorder;
@@ -65,7 +74,6 @@ export class Slot extends UIElement {
       ctx.textAlign = "left";
     }
 
-    // крестик
     const r = this.removeRect();
     if (r) {
       ctx.fillStyle = theme.button;

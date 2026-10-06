@@ -5,16 +5,10 @@ import { Button } from "../ui/button.js";
 import { Text } from "../ui/text.js";
 import { makeBackButton } from "../ui/back.js";
 import { drawWallet } from "../ui/currency.js";
+import { theme } from "../theme.js";
 import { MapScene } from "./map.js";
-
-const INFO = {
-  forest_clearing: {
-    name: "Лесная поляна",
-    desc: "Спокойное место для первых шагов.",
-  },
-  desert_dunes: { name: "Пустынные дюны", desc: "Жарко. Мало воды." },
-  frozen_lake: { name: "Мёрзлое озеро", desc: "Холодно. Скользко." },
-};
+import { get as getLocation } from "../game/locations/registry.js";
+import { state } from "../game/state.js";
 
 const LEVELS = [0, 1, 2, 3, 4, 5, 6];
 
@@ -26,12 +20,23 @@ export class MapInfoScene extends Scene {
   }
 
   enter() {
-    const info = INFO[this.id] ?? { name: this.id, desc: "" };
+    const loc = getLocation(this.id);
+    const prog = state.maps[this.id] ?? { unlocked: false, maxLevel: -1 };
+    this.prog = prog;
+
+    // доступный уровень = maxLevel + 1, но не больше 6
+    this.maxAvailable = Math.min(prog.maxLevel + 1, 6);
+    this.selectedLevel = Math.min(this.selectedLevel, this.maxAvailable);
 
     this.elements = [
       makeBackButton(),
-      new Text({ x: L.x(0.5), y: L.y(0.12), text: info.name, style: "title" }),
-      new Text({ x: L.x(0.5), y: L.y(0.25), text: info.desc, style: "dim" }),
+      new Text({ x: L.x(0.5), y: L.y(0.12), text: loc.name, style: "title" }),
+      new Text({
+        x: L.x(0.5),
+        y: L.y(0.25),
+        text: loc.description,
+        style: "dim",
+      }),
       new Text({
         x: L.x(0.5),
         y: L.y(0.3),
@@ -51,7 +56,9 @@ export class MapInfoScene extends Scene {
     const total = LEVELS.length * size + (LEVELS.length - 1) * gap;
     let lx = L.x(0.5) - total / 2;
     const ly = L.y(0.6);
+
     for (const lvl of LEVELS) {
+      const available = lvl <= this.maxAvailable;
       this.elements.push(
         new Button({
           x: lx,
@@ -59,13 +66,32 @@ export class MapInfoScene extends Scene {
           w: size,
           h: size,
           label: String(lvl),
+          disabled: !available,
           customDraw: (ctx, b) => {
-            const active = lvl === this.selectedLevel;
-            ctx.fillStyle = active ? "#4a7" : "#222";
+            const active = lvl === this.selectedLevel && available;
+            const cleared = lvl <= prog.maxLevel;
+
+            let bg = theme.levelUnselected;
+            let border = theme.levelUnselectedBorder;
+            if (cleared) {
+              bg = theme.accent;
+              border = theme.levelSelectedBorder;
+            }
+            if (active) {
+              bg = theme.levelSelected;
+              border = theme.levelSelectedBorder;
+            }
+            if (!available) {
+              bg = theme.buttonDisabled;
+              border = theme.buttonDisabledBorder;
+            }
+
+            ctx.fillStyle = bg;
             ctx.fillRect(b.x, b.y, b.w, b.h);
-            ctx.strokeStyle = active ? "#7fc" : "#444";
+            ctx.strokeStyle = border;
             ctx.strokeRect(b.x + 0.5, b.y + 0.5, b.w - 1, b.h - 1);
-            ctx.fillStyle = "#fff";
+
+            ctx.fillStyle = available ? theme.text : theme.textDisabled;
             ctx.font = `${L.s(0.035)}px monospace`;
             ctx.textAlign = "center";
             ctx.fillText(b.label, b.x + b.w / 2, b.y + b.h / 2 + L.s(0.012));

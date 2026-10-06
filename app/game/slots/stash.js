@@ -3,11 +3,12 @@ import { state } from "../state.js";
 import { defs } from "../defs.js";
 
 export class Stash {
-  constructor({ x, y, w, h, gap, cols, rows, onSlotClick }) {
+  constructor({ x, y, w, h, gap, cols, rows, heroId, onSlotClick }) {
     this.cols = cols;
     this.rows = rows;
     this.perPage = cols * rows;
     this.page = 0;
+    this.heroId = heroId;
 
     this.slots = [];
     for (let i = 0; i < this.perPage; i++) {
@@ -28,8 +29,11 @@ export class Stash {
     }
   }
 
+  // всё, кроме надетого на текущего героя
   list() {
-    return Object.values(state.instances).filter((i) => i.ownerId === "stash");
+    return Object.values(state.instances).filter(
+      (i) => i.ownerId !== this.heroId,
+    );
   }
 
   pageCount() {

@@ -27,6 +27,22 @@ export function init(root) {
   });
 
   window.addEventListener("keydown", (e) => current?.onKeyDown(e.key));
+
+  canvas.addEventListener("pointermove", (e) => {
+    const r = canvas.getBoundingClientRect();
+    const x = ((e.clientX - r.left) / r.width) * L.w;
+    const y = ((e.clientY - r.top) / r.height) * L.h;
+    current?.onPointerMove(x, y);
+  });
+
+  canvas.addEventListener(
+    "wheel",
+    (e) => {
+      e.preventDefault();
+      current?.onWheel?.(e);
+    },
+    { passive: false },
+  );
 }
 
 export function go(scene) {

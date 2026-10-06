@@ -12,11 +12,24 @@ export function buildHero(heroId) {
     name: def.name,
     description: def.description,
     stats: { ...def.baseStats },
+    prefs: { ...def.prefs },
     items: [],
   };
 
-  // позже — свёртка mods по слотам
-  // сейчас — только база
+  applyItems(hero);
+  return hero;
+}
+
+export function applyItems(hero) {
+  const slots = hero.state?.slots ?? [];
+
+  for (const iid of slots) {
+    if (!iid) continue;
+    const inst = state.instances[iid];
+    if (!inst) continue;
+    const def = defs.items.get(inst.defId);
+    def.apply?.(hero);
+  }
 
   return hero;
 }

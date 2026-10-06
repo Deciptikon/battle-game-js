@@ -20,6 +20,7 @@ export const THEMES = {
     panel: "#222",
     panelBorder: "#444",
     panelText: "#fff",
+    panelForeign: "#343434",
 
     progressBar: "#4a7",
     progressBg: "#222",

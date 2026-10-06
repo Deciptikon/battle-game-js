@@ -7,6 +7,7 @@ import { drawWallet } from "../ui/currency.js";
 import { WorldMapScene } from "./worldmap.js";
 import { MenuScene } from "./menu.js";
 import { MapScene } from "./map.js";
+import { theme } from "../theme.js";
 
 export class ResultScene extends Scene {
   constructor({ id, level, stats }) {

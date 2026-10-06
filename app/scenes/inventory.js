@@ -27,6 +27,7 @@ export class InventoryScene extends Scene {
       gap: L.s(0.012),
       cols: 5,
       rows: 2,
+      heroId: this.characterId,
       onSlotClick: (slot) => this.onSlotClick(slot),
     });
 
@@ -163,9 +164,10 @@ export class InventoryScene extends Scene {
   onSlotRemove(slot) {
     const entry = slot.entry;
     if (!entry) return;
-    if (this.selected === slot) {
-      this.selected = null;
-    }
+
+    slot.selected = false;
+    if (this.selected === slot) this.selected = null;
+
     entry.inst.ownerId = "stash";
     state.heroes[this.characterId].slots[slot.index] = null;
     saveLocal();

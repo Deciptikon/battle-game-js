@@ -5,8 +5,8 @@ export default {
   name: "Крыло мухи",
   description: "Уклонение = 8, HP = 2.",
 
-  mods: {
-    [STAT.EVASION]: () => 8,
-    [STAT.HP]: () => 2,
+  apply(hero) {
+    hero.stats[STAT.EVASION] = 8;
+    hero.stats[STAT.HP] = 2;
   },
 };

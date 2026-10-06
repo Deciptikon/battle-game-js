@@ -3,10 +3,8 @@ import { defs } from "./defs.js";
 
 export function initState() {
   resetState();
-
   loadLocal();
 
-  // герои
   for (const def of defs.heroes.all()) {
     if (!state.heroes[def.id]) {
       state.heroes[def.id] = {
@@ -19,14 +17,19 @@ export function initState() {
   }
   if (!state.heroes[state.activeHero]) state.activeHero = "cat";
 
-  // предметы: отметки открытости
   for (const def of defs.items.all()) {
-    if (!state.items[def.id]) {
-      state.items[def.id] = { unlocked: true };
+    if (!state.items[def.id]) state.items[def.id] = { unlocked: true };
+  }
+
+  for (const def of defs.locations.all()) {
+    if (!state.maps[def.id]) {
+      state.maps[def.id] = {
+        unlocked: def.startUnlocked ?? false,
+        maxLevel: -1, // -1 = не пройдена ни одна сложность
+      };
     }
   }
 
-  // тестовые инстансы на складе — только если их нет
   if (Object.keys(state.instances).length === 0) {
     for (const defId of ["walnut", "lead_bullet", "fly_wing"]) {
       const iid = makeInstanceId();

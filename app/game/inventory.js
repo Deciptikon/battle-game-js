@@ -86,17 +86,26 @@ export function swapInvSlots(heroId, i, j) {
   return true;
 }
 
-export function swapInvAndStash(heroId, slotIndex, stashIid) {
+export function swapInvAndStash(heroId, slotIndex, iid) {
   const hero = state.heroes[heroId];
   if (!hero) return false;
 
-  const newInst = state.instances[stashIid];
-  if (!newInst || newInst.ownerId !== "stash") return false;
+  const newInst = state.instances[iid];
+  if (!newInst) return false;
+
+  // снять с прошлого владельца
+  if (newInst.ownerId !== "stash" && newInst.ownerId !== heroId) {
+    const prev = state.heroes[newInst.ownerId];
+    if (prev) {
+      const i = prev.slots.indexOf(iid);
+      if (i !== -1) prev.slots[i] = null;
+    }
+  }
 
   const oldIid = hero.slots[slotIndex];
 
   newInst.ownerId = heroId;
-  hero.slots[slotIndex] = stashIid;
+  hero.slots[slotIndex] = iid;
 
   if (oldIid) {
     state.instances[oldIid].ownerId = "stash";
