@@ -1,7 +1,10 @@
+import { registerAssets } from "../../assets/registry.js";
+
 const byId = new Map();
 
 export function register(def) {
   if (byId.has(def.id)) throw new Error(`Duplicate item: ${def.id}`);
+  if (def.assets) registerAssets(def.id, def.assets);
   byId.set(def.id, def);
 }
 

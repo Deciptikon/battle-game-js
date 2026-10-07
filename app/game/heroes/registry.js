@@ -1,5 +1,6 @@
 import { STAT_LIST } from "../stats/enum.js";
 import { TILE_LIST } from "../tiles/enum.js";
+import { registerAssets } from "../../assets/registry.js";
 
 const byId = new Map();
 
@@ -14,6 +15,8 @@ export function register(def) {
     if (!TILE_LIST.includes(k))
       throw new Error(`Unknown tile "${k}" in ${def.id}`);
   }
+
+  if (def.assets) registerAssets(def.id, def.assets);
 
   byId.set(def.id, def);
 }

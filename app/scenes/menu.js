@@ -9,6 +9,7 @@ import { AchievementsScene } from "./achievements.js";
 import { SettingsScene } from "./settings.js";
 import { InfoScene } from "./info.js";
 import { WorldMapScene } from "./worldmap.js";
+import { ShopScene } from "./shop.js";
 
 export class MenuScene extends Scene {
   enter() {
@@ -18,10 +19,11 @@ export class MenuScene extends Scene {
       h = L.s(0.08),
       gap = L.s(0.02);
     const x = L.x(0.5) - w / 2;
-    let y = L.y(0.42);
+    let y = L.y(0.38);
 
     const items = [
-      { label: "В бой", scene: () => new WorldMapScene() },
+      { label: "Карта", scene: () => new WorldMapScene() },
+      { label: "Магазин", scene: () => new ShopScene() },
       { label: "Персонажи", scene: () => new CharactersScene() },
       { label: "Ачивки", scene: () => new AchievementsScene() },
       { label: "Настройки", scene: () => new SettingsScene() },
@@ -57,7 +59,9 @@ export class MenuScene extends Scene {
         x: L.x(0.5),
         y: L.y(0.2),
         text: "(персонаж)",
-        style: "faint",
+        size: 0.04,
+        color: "#444",
+        align: "center",
       }),
     );
   }

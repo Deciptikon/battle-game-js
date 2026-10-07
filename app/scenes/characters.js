@@ -3,6 +3,7 @@ import { push } from "../game.js";
 import { L } from "../layout.js";
 import { Button } from "../ui/button.js";
 import { Text } from "../ui/text.js";
+import { HeroCard } from "../ui/heroCard.js";
 import { makeBackButton } from "../ui/back.js";
 import { drawWallet } from "../ui/currency.js";
 import { CharacterScene } from "./character.js";
@@ -29,10 +30,7 @@ export class CharactersScene extends Scene {
   }
 
   rebuild() {
-    this.elements = this.elements.filter(
-      (el) =>
-        el instanceof Button && el.label === "←" && el === this.elements[0],
-    );
+    this.elements = this.elements.filter((el, i) => i === 0);
 
     const heroes = allHeroes();
 
@@ -53,12 +51,13 @@ export class CharactersScene extends Scene {
       const x = ox + col * (cellW + gap);
       const y = oy + row * (cellH + gap);
       this.elements.push(
-        new Button({
+        new HeroCard({
           x,
           y,
           w: cellW,
           h: cellH,
-          label: hero.name,
+          heroId: hero.id,
+          heroName: hero.name,
           onClick: () => push(new CharacterScene({ id: hero.id })),
         }),
       );
@@ -101,7 +100,8 @@ export class CharactersScene extends Scene {
         x: L.x(0.5),
         y: L.y(0.12),
         text: "Персонажи",
-        style: "title",
+        size: 0.06,
+        align: "center",
       }),
     );
     this.elements.push(
@@ -109,7 +109,8 @@ export class CharactersScene extends Scene {
         x: L.x(0.5),
         y: L.y(0.9) + L.s(0.05),
         text: `${this.page + 1} / ${this.pageCount()}`,
-        style: "dim",
+        size: 0.03,
+        align: "center",
       }),
     );
   }
