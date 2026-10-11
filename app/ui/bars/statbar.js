@@ -1,6 +1,6 @@
 import { ProgressBar } from "./progressbar.js";
-import { L } from "../layout.js";
-import { FONT } from "../styles.js";
+import { L } from "../../layout.js";
+import { FONT } from "../../styles.js";
 
 export class StatBar extends ProgressBar {
   constructor({ x, y, w, h, icon, iconSize, value, max = 10, color }) {

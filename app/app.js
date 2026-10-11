@@ -1,4 +1,5 @@
 import "./game/heroes/index.js";
+import "./game/predators/index.js";
 import "./game/items/index.js";
 import "./game/tiles/index.js";
 import "./game/locations/index.js";

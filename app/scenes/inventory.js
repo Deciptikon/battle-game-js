@@ -1,10 +1,10 @@
 import { Scene } from "../scene.js";
 import { L } from "../layout.js";
 import { theme } from "../theme.js";
-import { Button } from "../ui/button.js";
-import { Text } from "../ui/text.js";
-import { makeBackButton } from "../ui/back.js";
-import { drawWallet } from "../ui/currency.js";
+import { Button } from "../ui/base/button.js";
+import { Text } from "../ui/base/text.js";
+import { makeBackButton } from "../ui/hud/back.js";
+import { drawWallet } from "../ui/hud/currency.js";
 import { Stash } from "../game/slots/stash.js";
 import { HeroInventory } from "../game/slots/heroInventory.js";
 import { swapInvSlots, swapInvAndStash } from "../game/inventory.js";

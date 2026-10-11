@@ -1,10 +1,10 @@
 import { Scene } from "../scene.js";
 import { push } from "../game.js";
 import { L } from "../layout.js";
-import { Button } from "../ui/button.js";
-import { Text } from "../ui/text.js";
-import { makeBackButton } from "../ui/back.js";
-import { drawWallet } from "../ui/currency.js";
+import { Button } from "../ui/base/button.js";
+import { Text } from "../ui/base/text.js";
+import { makeBackButton } from "../ui/hud/back.js";
+import { drawWallet } from "../ui/hud/currency.js";
 import { theme } from "../theme.js";
 import { MapScene } from "./map.js";
 import { get as getLocation } from "../game/locations/registry.js";

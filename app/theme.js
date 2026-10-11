@@ -17,6 +17,9 @@ export const THEMES = {
     buttonDisabledBorder: "#333",
     buttonDisabledText: "#555",
 
+    toggleOn: "#e85a1a",
+    toggleOff: "#e8c31a",
+
     panel: "#222",
     panelBorder: "#444",
     panelText: "#fff",

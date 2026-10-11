@@ -1,6 +1,6 @@
-import { Button } from "./button.js";
-import { L } from "../layout.js";
-import { back } from "../game.js";
+import { Button } from "../base/button.js";
+import { L } from "../../layout.js";
+import { back } from "../../game.js";
 
 export function makeBackButton() {
   const s = L.s(0.08);

@@ -1,16 +1,17 @@
 import { Scene } from "../scene.js";
 import { push } from "../game.js";
 import { L } from "../layout.js";
-import { Button } from "../ui/button.js";
-import { Text } from "../ui/text.js";
-import { StatBar } from "../ui/statbar.js";
-import { makeBackButton } from "../ui/back.js";
-import { drawWallet } from "../ui/currency.js";
+import { Button } from "../ui/base/button.js";
+import { Text } from "../ui/base/text.js";
+import { StatBar } from "../ui/bars/statbar.js";
+import { makeBackButton } from "../ui/hud/back.js";
+import { drawWallet } from "../ui/hud/currency.js";
 import { InventoryScene } from "./inventory.js";
 import { buildHero } from "../game/runtime.js";
 import { STAT_LIST } from "../game/stats/enum.js";
 import { STAT_DEFS } from "../game/stats/defs.js";
 import { get, has } from "../assets/cache.js";
+import { state, saveLocal } from "../game/state.js";
 
 const MARGIN = 0.05; // отступ от краёв экрана
 const COL_W = 0.25; // ширина колонки статов
@@ -84,6 +85,22 @@ export class CharacterScene extends Scene {
         onClick: () => push(new InventoryScene({ characterId: this.id })),
       }),
     );
+    if (state.activeHero !== this.id) {
+      this.elements.push(
+        new Button({
+          x: L.x(0.75) - bw / 2,
+          y: L.y(0.82),
+          w: bw,
+          h: bh,
+          label: "Выбрать",
+          onClick: () => {
+            state.activeHero = this.id;
+            saveLocal();
+            this.enter(); // пересобрать сцену — кнопка исчезнет
+          },
+        }),
+      );
+    }
   }
 
   render(ctx) {

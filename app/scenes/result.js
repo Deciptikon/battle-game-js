@@ -1,9 +1,9 @@
 import { Scene } from "../scene.js";
 import { reset } from "../game.js";
 import { L } from "../layout.js";
-import { Button } from "../ui/button.js";
-import { Text } from "../ui/text.js";
-import { drawWallet } from "../ui/currency.js";
+import { Button } from "../ui/base/button.js";
+import { Text } from "../ui/base/text.js";
+import { drawWallet } from "../ui/hud/currency.js";
 import { WorldMapScene } from "./worldmap.js";
 import { MenuScene } from "./menu.js";
 import { MapScene } from "./map.js";

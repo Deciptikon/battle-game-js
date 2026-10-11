@@ -1,8 +1,8 @@
 import { Scene } from "../scene.js";
 import { L } from "../layout.js";
-import { Text } from "../ui/text.js";
-import { makeBackButton } from "../ui/back.js";
-import { drawWallet } from "../ui/currency.js";
+import { Text } from "../ui/base/text.js";
+import { makeBackButton } from "../ui/hud/back.js";
+import { drawWallet } from "../ui/hud/currency.js";
 
 export class SettingsScene extends Scene {
   enter() {

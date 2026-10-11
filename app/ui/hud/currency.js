@@ -1,5 +1,5 @@
-import { L } from "../layout.js";
-import { theme } from "../theme.js";
+import { L } from "../../layout.js";
+import { theme } from "../../theme.js";
 
 export const wallet = {
   coins: 0,

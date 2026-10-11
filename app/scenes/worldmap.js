@@ -1,9 +1,9 @@
 import { Scene } from "../scene.js";
 import { push } from "../game.js";
 import { L } from "../layout.js";
-import { Text } from "../ui/text.js";
-import { makeBackButton } from "../ui/back.js";
-import { drawWallet } from "../ui/currency.js";
+import { Text } from "../ui/base/text.js";
+import { makeBackButton } from "../ui/hud/back.js";
+import { drawWallet } from "../ui/hud/currency.js";
 import { WorldMap } from "../game/worldmap/worldmap.js";
 import { LocationIcon } from "../game/worldmap/locationIcon.js";
 import { MapInfoScene } from "./mapinfo.js";

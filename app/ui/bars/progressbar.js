@@ -1,5 +1,5 @@
-import { UIElement } from "./element.js";
-import { theme } from "../theme.js";
+import { UIElement } from "../element.js";
+import { theme } from "../../theme.js";
 
 export class ProgressBar extends UIElement {
   constructor({ x, y, w, h, value = 0, max = 1, color = null }) {

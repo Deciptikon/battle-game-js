@@ -1,7 +1,16 @@
 import { TILE } from "../../tiles/enum.js";
+import { randomGrid } from "../generate.js";
 
-const row = new Array(20).fill(TILE.PLAIN);
-const grid = Array.from({ length: 20 }, () => [...row]);
+const grid = randomGrid(20, {
+  [TILE.PLAIN]: 30,
+  [TILE.FOREST]: 20,
+  [TILE.MOUNTAIN]: 8,
+  [TILE.SWAMP]: 5,
+  [TILE.SNOW]: 3,
+  [TILE.DESERT]: 2,
+  [TILE.SEA]: 5,
+  [TILE.LAVA]: 0,
+});
 
 export default {
   id: "forest_clearing",

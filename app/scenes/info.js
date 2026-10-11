@@ -1,7 +1,7 @@
 import { Scene } from "../scene.js";
 import { L } from "../layout.js";
-import { Text } from "../ui/text.js";
-import { makeBackButton } from "../ui/back.js";
+import { Text } from "../ui/base/text.js";
+import { makeBackButton } from "../ui/hud/back.js";
 
 export class InfoScene extends Scene {
   enter() {

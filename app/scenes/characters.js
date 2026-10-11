@@ -1,11 +1,11 @@
 import { Scene } from "../scene.js";
 import { push } from "../game.js";
 import { L } from "../layout.js";
-import { Button } from "../ui/button.js";
-import { Text } from "../ui/text.js";
+import { Button } from "../ui/base/button.js";
+import { Text } from "../ui/base/text.js";
 import { HeroCard } from "../ui/heroCard.js";
-import { makeBackButton } from "../ui/back.js";
-import { drawWallet } from "../ui/currency.js";
+import { makeBackButton } from "../ui/hud/back.js";
+import { drawWallet } from "../ui/hud/currency.js";
 import { CharacterScene } from "./character.js";
 import { all as allHeroes } from "../game/heroes/registry.js";
 

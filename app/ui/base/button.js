@@ -1,7 +1,7 @@
-import { UIElement } from "./element.js";
-import { L } from "../layout.js";
-import { theme } from "../theme.js";
-import { resolveStyle } from "../styles.js";
+import { UIElement } from "../element.js";
+import { L } from "../../layout.js";
+import { theme } from "../../theme.js";
+import { resolveStyle } from "../../styles.js";
 
 export class Button extends UIElement {
   constructor({

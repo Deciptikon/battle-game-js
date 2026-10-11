@@ -7,6 +7,12 @@ export default {
   description: "Лёгкая, скрытная, летает по любым клеткам.",
   startUnlocked: true,
 
+  assets: {
+    icon: new URL("./icon.png", import.meta.url).href,
+    portrait: new URL("./portrait.png", import.meta.url).href,
+    sprite: new URL("./sprite.png", import.meta.url).href,
+  },
+
   baseStats: {
     [STAT.HP]: 3,
     [STAT.ARMOR]: 2,

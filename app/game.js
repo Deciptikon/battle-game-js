@@ -1,5 +1,6 @@
 import { L } from "./layout.js";
 import { theme } from "./theme.js";
+import { drawLog } from "./debug.js";
 
 let canvas, ctx;
 let current = null;
@@ -78,5 +79,6 @@ function loop(now) {
   ctx.fillStyle = theme.bg;
   ctx.fillRect(0, 0, L.w, L.h);
   current?.render(ctx);
+  drawLog(ctx);
   requestAnimationFrame(loop);
 }

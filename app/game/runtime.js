@@ -1,5 +1,6 @@
 import { defs } from "./defs.js";
 import { state } from "./state.js";
+import { buildHeroSkills, buildItemSkills } from "./skills.js";
 
 export function buildHero(heroId) {
   const def = defs.heroes.get(heroId);
@@ -17,6 +18,10 @@ export function buildHero(heroId) {
   };
 
   applyItems(hero);
+
+  hero.heroSkills = buildHeroSkills(def, hero);
+  hero.itemSkills = buildItemSkills(hero);
+
   return hero;
 }
 
@@ -28,7 +33,7 @@ export function applyItems(hero) {
     const inst = state.instances[iid];
     if (!inst) continue;
     const def = defs.items.get(inst.defId);
-    def.apply?.(hero);
+    if (typeof def.apply === "function") def.apply(hero);
   }
 
   return hero;
