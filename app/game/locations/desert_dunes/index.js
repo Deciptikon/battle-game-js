@@ -7,7 +7,7 @@ export default {
   id: "desert_dunes",
   name: "Пустынные дюны",
   description: "Жарко. Мало воды.",
-  position: { x: 0.5, y: 0.65 },
+  position: { x: 0.57, y: 0.52 },
   startUnlocked: true,
   style: "pixel",
   grid,

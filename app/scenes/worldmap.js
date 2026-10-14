@@ -9,15 +9,18 @@ import { LocationIcon } from "../game/worldmap/locationIcon.js";
 import { MapInfoScene } from "./mapinfo.js";
 import { all as allLocations } from "../game/locations/registry.js";
 import { state } from "../game/state.js";
+import { has, get } from "../assets/cache.js";
 
 const DRAG_THRESHOLD = 6;
 
 export class WorldMapScene extends Scene {
   enter() {
+    const image = has("worldmap.image") ? get("worldmap.image") : null;
+
     this.map = new WorldMap({
-      image: null,
-      worldW: 1000,
-      worldH: 700,
+      image: image,
+      worldW: 1024,
+      worldH: 1024,
       locations: allLocations(),
     });
     this.map.setViewport(L.w, L.h);

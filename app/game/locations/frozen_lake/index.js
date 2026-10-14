@@ -7,7 +7,7 @@ export default {
   id: "frozen_lake",
   name: "Мёрзлое озеро",
   description: "Холодно. Скользко.",
-  position: { x: 0.72, y: 0.42 },
+  position: { x: 0.8, y: 0.08 },
   startUnlocked: false,
   style: "pixel",
   grid,
