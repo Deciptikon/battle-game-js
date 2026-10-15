@@ -1,3 +1,4 @@
+import { LIFESTYLE, ROLE, SIZE } from "../../actors/tags.js";
 import { STAT } from "../../stats/enum.js";
 import { TILE } from "../../tiles/enum.js";
 
@@ -6,6 +7,9 @@ export default {
   name: "Синица",
   description: "Лёгкая, скрытная, летает по любым клеткам.",
   startUnlocked: true,
+  tags: {
+    self: [SIZE.SMALL, LIFESTYLE.AIR, ROLE.PET],
+  },
 
   assets: {
     icon: new URL("./icon.png", import.meta.url).href,

@@ -1,3 +1,4 @@
+import { LIFESTYLE, ROLE, SIZE } from "../../actors/tags.js";
 import { STAT } from "../../stats/enum.js";
 import { TILE } from "../../tiles/enum.js";
 
@@ -11,9 +12,12 @@ export default {
     sprite: new URL("./sprite.png", import.meta.url).href,
   },
 
-  tags: ["predator", "bird", "medium", "air"],
-  hunts: ["small"],
-  avoid: [],
+  tags: {
+    self: [SIZE.MEDIUM, LIFESTYLE.AIR, ROLE.PREDATOR],
+    hunts: {
+      size: [SIZE.SMALL],
+    },
+  },
 
   attackType: "talon",
   attackRange: 1,

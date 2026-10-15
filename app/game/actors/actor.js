@@ -38,10 +38,9 @@ export class Actor {
     this.prefs = {};
     this.skills = [];
 
-    this.tags = [];
-    this.hunts = [];
     this.faction = null;
-    this.avoid = [];
+    this.tags = [];
+    this.hunts = null;
   }
 
   // --- статы ---

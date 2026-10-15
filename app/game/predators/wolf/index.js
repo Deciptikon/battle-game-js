@@ -1,3 +1,4 @@
+import { LIFESTYLE, ROLE, SIZE } from "../../actors/tags.js";
 import { STAT } from "../../stats/enum.js";
 import { TILE } from "../../tiles/enum.js";
 
@@ -11,9 +12,13 @@ export default {
     sprite: new URL("./sprite.png", import.meta.url).href,
   },
 
-  tags: ["predator", "mammal", "medium", "ground"],
-  hunts: ["medium", "large"],
-  avoid: ["air"],
+  tags: {
+    self: [SIZE.MEDIUM, LIFESTYLE.GROUND, ROLE.PREDATOR],
+    hunts: {
+      size: [SIZE.MEDIUM, SIZE.LARGE],
+      lifestyle: [LIFESTYLE.GROUND],
+    },
+  },
 
   attackType: "bite",
   attackRange: 1,

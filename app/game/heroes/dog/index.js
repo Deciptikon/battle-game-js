@@ -1,3 +1,4 @@
+import { LIFESTYLE, ROLE, SIZE } from "../../actors/tags.js";
 import { STAT } from "../../stats/enum.js";
 import { TILE } from "../../tiles/enum.js";
 
@@ -6,6 +7,9 @@ export default {
   name: "Пёс",
   description: "Тяжёлый, живучий, не скрытный.",
   startUnlocked: true,
+  tags: {
+    self: [SIZE.LARGE, LIFESTYLE.GROUND, ROLE.PET],
+  },
 
   assets: {
     icon: new URL("./icon.png", import.meta.url).href,

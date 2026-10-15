@@ -20,6 +20,8 @@ export class Pet extends Actor {
 
     this.stats = { ...def.baseStats };
     this.prefs = { ...def.prefs };
+    this.tags = def.tags?.self ?? [];
+    this.hunts = null;
 
     this.initBaseStats();
     this.applyItems();

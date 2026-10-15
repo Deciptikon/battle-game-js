@@ -1,3 +1,4 @@
+import { LIFESTYLE, ROLE, SIZE } from "../../actors/tags.js";
 import { STAT } from "../../stats/enum.js";
 import { TILE } from "../../tiles/enum.js";
 
@@ -6,6 +7,9 @@ export default {
   name: "Кот",
   description: "Усреднённый. Удобен для начала.",
   startUnlocked: true,
+  tags: {
+    self: [SIZE.MEDIUM, LIFESTYLE.GROUND, ROLE.PET],
+  },
 
   assets: {
     icon: new URL("./icon.png", import.meta.url).href,
@@ -21,10 +25,10 @@ export default {
   },
 
   baseStats: {
-    [STAT.HP]: 1,
+    [STAT.HP]: 5,
     [STAT.ARMOR]: 4,
     [STAT.STEALTH]: 5,
-    [STAT.SPEED]: 5,
+    [STAT.SPEED]: 3,
     [STAT.CAUTION]: 5,
     [STAT.EVASION]: 5,
     [STAT.MORALE]: 5,
@@ -41,9 +45,9 @@ export default {
     [TILE.SWAMP]: 20,
     [TILE.BADLANDS]: 15,
     [TILE.ICE]: 10,
-    [TILE.DESERT]: 5,
-    [TILE.SEA]: 100,
-    [TILE.LAVA]: 0,
+    [TILE.DESERT]: 10,
+    [TILE.SEA]: 10,
+    [TILE.LAVA]: 10,
   },
 
   onState(actor, mask, ctx) {
